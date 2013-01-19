@@ -7,12 +7,9 @@ urlpatterns = patterns('',
     url(r'^$',
         "artexer.app.views.home",
         name="home"),
-    url(r'^(?P<page1>[a-z0-9_]+)/$',
-        "artexer.app.views.page_view",
-        name="page_view"),
-    url(r'^(?P<page1>[a-z0-9_]+)/(?P<page2>[a-z0-9_]+)/$',
-        "artexer.app.views.page_view",
-        name="page_view"),
+
+    url(r'^admin/', include(admin.site.urls)),
+
     url(r'^add/$', "artexer.app.views.page_add",
         name="page_add"),
     url(r'^(?P<page1>[a-z0-9_]+)/add/$',
@@ -31,5 +28,11 @@ urlpatterns = patterns('',
         "artexer.app.views.page_delete",
         name="page_delete"),
 
-    url(r'^admin/', include(admin.site.urls)),
+    url(r'^(?P<page1>[a-z0-9_]+)/$',
+        "artexer.app.views.page_view",
+        name="page_view"),
+    url(r'^(?P<page1>[a-z0-9_]+)/(?P<page2>[a-z0-9_]+)/$',
+        "artexer.app.views.page_view",
+        name="page_view"),
+
 )
