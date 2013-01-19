@@ -1,5 +1,8 @@
 *.py[cod]
 
+env
+db.db
+
 # C extensions
 *.so
 

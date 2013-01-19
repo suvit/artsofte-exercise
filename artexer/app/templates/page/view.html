@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<ul>
+<li>Заголовок: {{ page.title }}</li>
+<li>Заголовок: {{ page.get_text|safe }}</li>
+{% for page in page.get_children %}
+{% if forloop.first %}
+<li>Дочерние страницы</li>
+{% endif %}
+<li>{% include 'page_link.html' %}</li>
+{% endfor %}
+</ul>
+
+{% if page.parent %}
+<p><a href="{% url page_view page.parent.slug %}">родительская страница</a></p>
+{% endif %}
+<p><a href="{% url page_delete page.slug %}">удалить страницу</a></p>
+<p><a href="{% url page_edit page.slug %}">редактировать страницу</a></p>
+<p><a href="{% url page_add page.slug %}">добавить дочернию страницу</a></p>
+
+{% endblock %}

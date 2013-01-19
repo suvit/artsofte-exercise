@@ -1,0 +1,22 @@
+{% spaceless %}<!DOCTYPE html>
+<html>
+<body>
+{% block body %}
+{% for page in pages %}
+{% if forloop.first %}
+<ul>
+{% endif %}
+<li>{% include 'page_link.html' %}</li>
+{% if forloop.last %}
+</ul>
+{% endif %}
+{% empty %}
+<p>Страницы не найдены.</p>
+{% endfor %}
+
+<p><a href="{% url page_add %}">добавить новую страницу</a></p>
+
+{% endblock body %}
+</body>
+</html>
+{% endspaceless %}
