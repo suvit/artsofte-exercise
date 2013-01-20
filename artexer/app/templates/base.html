@@ -4,10 +4,12 @@
   <link rel="shortcut icon" href="/static/favicon.ico" />
 </head>
 <body>
+<a href="/">Главная</a>
 {% block body %}
 <h1>Artsofte wiki</h1>
 {% for page in pages %}
 {% if forloop.first %}
+<p>Страницы</p>
 <ul>
 {% endif %}
 <li>{% include 'page_link.html' %}</li>

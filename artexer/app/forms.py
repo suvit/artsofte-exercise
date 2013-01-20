@@ -10,9 +10,7 @@ from artexer.app.models import Page
 
 slug_re = re.compile(r'^[a-z0-9_]+$')
 validate_slug = RegexValidator(slug_re,
-                               u'Введите правильный адрес из строчных'
-                               u' английских букв, чисел и подчеркивания',
-                              'invalid')
+                               code='invalid')
 
 class SlugField(forms.CharField):
     default_error_messages = {
@@ -20,14 +18,6 @@ class SlugField(forms.CharField):
                    u' английских букв, чисел и подчеркивания',
     }
     default_validators = [validate_slug]
-
-    def validate(self, value):
-        super(SlugField, self).validate(value)
-
-        if value in ['admin', 'add', 'edit', 'delete']:
-            raise forms.ValidationError(u'Значение %s зарезервирована'
-                                        u' для внутреннего иcпользования.'
-                                        u' Используйте другое значение' % value)
 
 
 class PageAddForm(forms.ModelForm):
@@ -45,6 +35,11 @@ class PageAddForm(forms.ModelForm):
         if slug == '':
             slug = slugify(self.cleaned_data['title'])
             slug = slug.replace('-','_').lower()
+
+        if slug in ['admin', 'add', 'edit', 'delete']:
+            raise forms.ValidationError(u'Значение %s зарезервирована'
+                                        u' для внутреннего иcпользования.'
+                                        u' Используйте другое значение' % slug)
 
         return slug
 

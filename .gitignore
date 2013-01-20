@@ -2,6 +2,7 @@
 
 env
 db.db
+settings_local.py
 
 # C extensions
 *.so

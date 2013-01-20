@@ -7,13 +7,13 @@ from django.core.urlresolvers import reverse, resolve
 
 from artexer.app.views import get_page, page_view
 
-
 register = template.Library()
 
 quot_re = re.compile('"|\'')
 links_re = re.compile('\[{1,2}(?P<link>[^\s\]]+)(?P<name>[^\]]*)\]{1,2}')
 
 
+@register.filter
 def wiki_render(text):
     quote_cycle = cycle(['&laquo;', '&raquo;'])
     while True:
@@ -48,7 +48,9 @@ def wiki_render(text):
                     classes = 'class="not_found"'
                     link = reverse('page_add', kwargs=kwargs)
 
-        return '<a %s href="%s">%s</a>' % (classes, link.replace('/', '&#47;'), name)
+        return '<a %s href="%s">%s</a>' % (classes,
+                                           link.replace('/', '&#47;'),
+                                           name)
 
     text = links_re.sub(link_finder, text)
 
@@ -77,5 +79,3 @@ def wiki_render(text):
         text = u_cycle.next().join((part1, part2))
 
     return '<br />'.join(text.splitlines())
-
-register.filter('wiki_render', wiki_render)
