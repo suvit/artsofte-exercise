@@ -32,7 +32,7 @@ class PageAddForm(forms.ModelForm):
     def clean_slug(self):
         slug = self.cleaned_data['slug']
 
-        if slug == '':
+        if slug == '' and 'title' in self.cleaned_data:
             slug = slugify(self.cleaned_data['title'])
             slug = slug.replace('-','_').lower()
 
