@@ -17,23 +17,19 @@ class Page(models.Model):
         unique_together = ('parent', 'slug')
 
     def __unicode__(self):
-        try:
-            url = self.get_absolute_url()
-        except:
-            url = '/'
-        return u'%s (%s)' % (self.title, url)
+        return u'%s (%s)' % (self.title, self.get_absolute_url())
 
     def clean(self):
-        if not self.parent and Page.objects.filter(slug=self.slug).exists():
+        if not self.id and not self.parent and Page.objects.filter(slug=self.slug).exists():
             raise ValidationError(u"Адрес %s уже существует. Используйте другой адрес" % self.slug)
 
     def get_absolute_url(self):
         args = [ self.slug ]
         self.parent_id and args.insert(0, self.parent.slug)
-        return reverse('page_view', args=args)
-
-    def get_text(self):
-        return self.text
+        try:
+            return reverse('page_view', args=args)
+        except:
+            return 'bad url'
 
     def get_children(self):
         return Page.objects.filter(parent=self)

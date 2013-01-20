@@ -27,7 +27,6 @@ def home(request):
 
 
 def page_add(request, page1=None, page2=None):
-    parent = None
     initial = {}
     if page1 is page2 is None:
         # add parent page without name
@@ -63,7 +62,7 @@ def page_add(request, page1=None, page2=None):
     return TemplateResponse(request,
                             'page/edit.html',
                             {'form': form,
-                             'parent': parent}
+                             'parent': initial.get('parent')}
                            )
 
 
@@ -110,11 +109,7 @@ def page_404(request):
     except http.Http404:
         pass
     else:
-        if func is page_view:
-            vars_['page_add'] = reverse('page_add', kwargs=kwargs)
-        elif func is page_edit:
-            vars_['page_add'] = reverse('page_add', kwargs=kwargs)
-        elif func is page_delete:
+        if func in [page_view, page_edit, page_delete]:
             vars_['page_add'] = reverse('page_add', kwargs=kwargs)
 
     context = RequestContext(request,
