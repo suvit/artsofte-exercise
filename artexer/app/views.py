@@ -39,13 +39,13 @@ def page_add(request, page1=None, page2=None):
             initial['slug'] = initial['title'] = page1
         else:
             # add to founded page
-            parent = page
+            initial['parent'] = page
     else:
         try:
             page = get_page(page1, page2)
         except http.Http404:
             try:
-                parent = get_page(page2)
+                initial['parent'] = get_page(page2)
             except http.Http404:
                 return redirect('page_add', page2)
             else:
@@ -57,11 +57,7 @@ def page_add(request, page1=None, page2=None):
     form = PageAddForm(request.POST or None, initial=initial)
     if request.method == 'POST':
         if form.is_valid():
-            new_page = form.save(commit=False)
-            if parent:
-                new_page.parent = parent
-            new_page.save()
-
+            new_page = form.save()
             return redirect(new_page.get_absolute_url())
 
     return TemplateResponse(request,

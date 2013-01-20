@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 
 from django.db import models
@@ -16,7 +17,15 @@ class Page(models.Model):
         unique_together = ('parent', 'slug')
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.title, self.get_absolute_url())
+        try:
+            url = self.get_absolute_url()
+        except:
+            url = '/'
+        return u'%s (%s)' % (self.title, url)
+
+    def clean(self):
+        if not self.parent and Page.objects.filter(slug=self.slug).exists():
+            raise ValidationError(u"Адрес %s уже существует. Используйте другой адрес" % self.slug)
 
     def get_absolute_url(self):
         args = [ self.slug ]

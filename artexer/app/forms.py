@@ -4,6 +4,8 @@ import re
 from django import forms
 from django.core.validators import RegexValidator
 
+from pytils.translit import slugify
+
 from artexer.app.models import Page
 
 slug_re = re.compile(r'^[a-z0-9_]+$')
@@ -30,20 +32,21 @@ class SlugField(forms.CharField):
 
 class PageAddForm(forms.ModelForm):
 
-    slug = SlugField(label=u'Адрес')
+    slug = SlugField(label=u'Адрес', required=False)
 
     class Meta:
         model = Page
-        fields = ('title', 'slug', 'text')
+        fields = ('title', 'slug', 'text', 'parent')
+        widgets = {'parent': forms.HiddenInput}
 
     def clean_slug(self):
-        data = self.cleaned_data
-        slug = data['slug']
-        if Page.objects.filter(slug=slug).exists():
-            raise forms.ValidationError(u"Страница с адресом %s"
-                                        u" уже существует" % slug)
+        slug = self.cleaned_data['slug']
 
-        return data
+        if slug == '':
+            slug = slugify(self.cleaned_data['title'])
+            slug = slug.replace('-','_').lower()
+
+        return slug
 
 class PageEditForm(forms.ModelForm):
 
