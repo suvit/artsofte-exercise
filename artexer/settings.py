@@ -142,7 +142,14 @@ LOGGING = {
     },
 }
 
+SENTRY_DSN = None
+
 try:
     from settings_local import *
 except ImportError:
     pass
+
+if SENTRY_DSN is not None:  # may changed in settings_local
+    INSTALLED_APPS = INSTALLED_APPS + (
+        'raven.contrib.django',
+    )
