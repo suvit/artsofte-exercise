@@ -1,7 +1,11 @@
 {% spaceless %}<!DOCTYPE html>
 <html>
+<head>
+  <link rel="shortcut icon" href="/static/favicon.ico" />
+</head>
 <body>
 {% block body %}
+<h1>Artsofte wiki</h1>
 {% for page in pages %}
 {% if forloop.first %}
 <ul>

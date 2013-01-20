@@ -1,1 +1,12 @@
 {% extends 'base.html' %}
+
+{% block body %}
+<h1>{% if form.instance.id %}Редактировать {{form.instance}}
+    {% else %}Добавить страницу {% if parent %}(родитель {{parent}}){% endif %}
+    {% endif%}</h1>
+<form method="post">
+{% csrf_token %}
+{{ form.as_p }}
+<input type="submit" value="{% if form.instance.id %}Редактировать{% else %}Добавить{% endif%}"/>
+</form>
+{% endblock %}

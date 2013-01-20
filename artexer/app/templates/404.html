@@ -1,1 +1,11 @@
 {% extends 'base.html' %}
+
+{% block body %}
+<h1>404 страница не найдена</h1>
+<p>вы искали <b>{{request_path}}</b></p>
+{% if page_add %}
+<p><a href="{{ page_add }}">Добавить страницу</a></p>
+{% else %}
+<p><a href="/">Вернитесь на главную страницу</a> для продолжения работы</p>
+{% endif %}
+{% endblock %}

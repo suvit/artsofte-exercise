@@ -1,1 +1,8 @@
 {% extends 'base.html' %}
+{% block body %}
+<h1>Удалить страницу {{ page }}</h1>
+<form method="get">
+<p>Действительно удалить страницу {{ page }}?</p>
+<input type="submit" name="confirm" value="Удалить"/>
+</form>
+{% endblock %}

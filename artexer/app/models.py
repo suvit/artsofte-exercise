@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from django.core.urlresolvers import reverse
+
 from django.db import models
 
 # Create your models here.
@@ -8,14 +10,21 @@ class Page(models.Model):
     slug = models.SlugField(u'Адрес')
     text = models.TextField(u'Текст')
     parent = models.ForeignKey('self', verbose_name=u'Родитель',
-                               null=True)
-
-    def get_absolute_url(self):
-        parent = page.parent
-        return '/'
-
-    def get_children(self):
-        return self.objects.filter(parent=self)
+                               blank=True, null=True)
 
     class Meta:
         unique_together = ('parent', 'slug')
+
+    def __unicode__(self):
+        return u'%s (%s)' % (self.title, self.get_absolute_url())
+
+    def get_absolute_url(self):
+        args = [ self.slug ]
+        self.parent_id and args.insert(0, self.parent.slug)
+        return reverse('page_view', args=args)
+
+    def get_text(self):
+        return self.text
+
+    def get_children(self):
+        return Page.objects.filter(parent=self)
